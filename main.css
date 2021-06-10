@@ -1,21 +1,47 @@
 body {
+  margin: 0;
+}
+
+.parent {
   display: grid;
   height: 100vh;
   grid-template-rows: auto 1fr auto;
   font-family: system-ui, sans-serif;
-  margin: 0;
 }
 
-header {
+.header {
   background: lightpink;
-  padding: 2rem;
+  padding: 1rem;
 }
 
-main {
+.main {
   background: coral;
+  display: grid;
+  place-items: center;
 }
 
-footer {
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: lightblue;
+    height: 100%;
+    width: 50%;
+}
+
+.instructions {
+    display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+.gameboard {
+    background: lightgrey;
+    height: 400px;
+    width: 400px;
+}
+
+.footer {
   background: wheat;
   padding: 2rem;
   text-align: center;
