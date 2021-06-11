@@ -1,0 +1,89 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --cell-size: 200px;
+  /* --emoji-size: calc(var(var(--cell-size) * 0.9)); */
+}
+
+body {
+  margin: 0;
+}
+
+.parent {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 1fr auto;
+  font-family: system-ui, sans-serif;
+}
+
+.header {
+  background: lightpink;
+  padding: 1rem;
+}
+
+.main {
+  background: coral;
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: lightblue;
+  height: 100%;
+  width: 50%;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 
+refactor this code so the player icons display inline at the beginning and end of the parent, respectively
+.avatars {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.players {
+  display: inline;
+} */
+
+.gameboard {
+  background: lightgrey;
+  height: 600px;
+  width: 600px;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: repeat(3, auto);
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 2px solid blueviolet;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.footer {
+  background: wheat;
+  padding: 2rem;
+  text-align: center;
+}
