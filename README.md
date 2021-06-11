@@ -1,3 +1,8 @@
+TO DO
+* refactor code to build and destroy game board with document fragment + replace children
+* refactor code to use browserify instead of modules
+* create a User Story section following the README template I created for myself in GA
+
 how to call twemoji cdn in browser
 https://dev.to/iamludal/you-are-using-emojis-the-wrong-way-i71
 

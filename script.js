@@ -2,22 +2,36 @@ import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-butt
 
 const picker = new EmojiButton({ autoHide: false });
 const trigger = document.querySelector("#emoji-trigger");
-const gameboard = document.querySelector("#gameboard");
+const gameboard = document.getElementById("gameboard");
+const startBtn = document.querySelector("#start");
 
+startBtn.addEventListener("click", startGame);
 // create game board
 function startGame() {
-  while (gameboard.childNodes.length < 9) {
-    addCellToBoard();
-  } 
+  // remove existing children of gameboard
+  clearBoard();
+  // add 9 cells to gameboard
+  for (let cells = 0; cells < 9; cells++) {
+    gameboard.appendChild(createCell());
+  }
 }
 
-function addCellToBoard() {
+function clearBoard() {
+  while (gameboard.firstChild) {
+    gameboard.removeChild(gameboard.firstChild);
+  }
+}
+
+function createCell() {
   let cell = document.createElement("div");
   cell.classList.add("cell");
-  gameboard.appendChild(cell);
+  cell.addEventListener("click", handleCellClick, { once: true });
+  return cell;
 }
 
-startGame();
+function handleCellClick(event) {
+  console.log(event.target, " clicked");
+}
 
 let currentPlayer;
 let notCurrentPlayer;
