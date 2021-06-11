@@ -8,17 +8,24 @@
   </head>
   <body>
     <div class="parent">
-      <header class="header"> <h1>Twemoji Tic Tac Toe</h1></header>
+      <header class="header"><h1>Twemoji Tic Tac Toe</h1></header>
       <main class="main">
         <div class="card">
-         <div class="instructions">
-           <h3>INSTRUCTIONS</h3>
-           <p>This is how you play the game</p>
-           <p>Here are directions for what to do right now</p>
-           <h5>If game has been won, this is where it will display</h5>
-         </div>
+          <div class="instructions">
+            <h3>INSTRUCTIONS</h3>
+            <p>This is how you play the game</p>
+            <p>Here are directions for what to do right now</p>
+            <div class="avatars">
+              <div class="players">Player 1: <span id="player1"></span></div>
+              <div class="players">
+                Player 2:
+                <span id="player2"></span>
+              </div>
+            </div>
+            <h5>If game has been won, this is where it will display</h5>
+          </div>
           <div class="gameboard">Gameboard</div>
-          <button id="emoji-trigger">🙂</button>
+          <button id="emoji-trigger">Pick an emoji</button>
         </div>
       </main>
       <footer class="footer">Footer Content</footer>
