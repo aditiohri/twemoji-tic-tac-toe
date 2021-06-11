@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link href="main.css" rel="stylesheet" />
-    <script type="module" src="script.js"></script>
+    <link href="styles.css" rel="stylesheet" />
+    <script defer type="module" src="script.js"></script>
     <title>Twemoji Tic Tac Toe!</title>
   </head>
   <body>
@@ -12,9 +12,6 @@
       <main class="main">
         <div class="card">
           <div class="instructions">
-            <h3>INSTRUCTIONS</h3>
-            <p>This is how you play the game</p>
-            <p>Here are directions for what to do right now</p>
             <div class="avatars">
               <div class="players">Player 1: <span id="player1"></span></div>
               <div class="players">
@@ -22,9 +19,8 @@
                 <span id="player2"></span>
               </div>
             </div>
-            <h5>If game has been won, this is where it will display</h5>
           </div>
-          <div class="gameboard">Gameboard</div>
+          <div class="gameboard" id="gameboard"></div>
           <button id="emoji-trigger">Pick an emoji</button>
         </div>
       </main>
