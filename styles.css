@@ -5,8 +5,9 @@
 }
 
 :root {
-  --cell-size: 200px;
-  /* --emoji-size: calc(var(var(--cell-size) * 0.9)); */
+  --cell-size-desktop: 200px;
+  --emoji-size-desktop: calc((var --cell-size-desktop) * 0.9);
+  --emoji-size-mobile: calc((var --cell-size-mobile) * 0.9);
 }
 
 body {
@@ -23,6 +24,8 @@ body {
 .header {
   background: lightpink;
   padding: 1rem;
+  display: grid;
+  place-items: center;
 }
 
 .main {
@@ -38,7 +41,7 @@ body {
   justify-content: center;
   background: lightblue;
   height: 100%;
-  width: 50%;
+  width: 100%;
 }
 
 .instructions {
@@ -72,8 +75,8 @@ refactor this code so the player icons display inline at the beginning and end o
 }
 
 .cell {
-  width: var(--cell-size);
-  height: var(--cell-size);
+  width: var(--cell-size-desktop);
+  height: var(--cell-size-desktop);
   border: 2px solid blueviolet;
   display: flex;
   justify-content: center;
@@ -86,4 +89,23 @@ refactor this code so the player icons display inline at the beginning and end o
   background: wheat;
   padding: 2rem;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .header,
+  .footer {
+    color: green;
+    padding: 0.25rem;
+  }
+
+  .gameboard {
+    height: 100vw;
+    width: 100vw;
+    background: orange;
+  }
+
+  .cell {
+    height: 33vw;
+    width: 33vw;
+  }
 }
