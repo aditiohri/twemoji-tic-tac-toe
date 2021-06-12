@@ -7,7 +7,7 @@
 :root {
   --cell-size-desktop: 200px;
   --emoji-size-desktop: calc((var --cell-size-desktop) * 0.9);
-  --emoji-size-mobile: calc((var --cell-size-mobile) * 0.9);
+  --emoji-size-mobile: calc(33vw * 0.9);
 }
 
 body {
@@ -62,7 +62,7 @@ refactor this code so the player icons display inline at the beginning and end o
   display: inline;
 } */
 
-.gameboard {
+.board {
   background: lightgrey;
   height: 600px;
   width: 600px;
