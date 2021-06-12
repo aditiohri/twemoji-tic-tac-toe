@@ -50,6 +50,9 @@ body {
   align-items: center;
 }
 
+.players span {
+  font-size: 4rem;
+}
 /* 
 refactor this code so the player icons display inline at the beginning and end of the parent, respectively
 .avatars {
@@ -83,10 +86,17 @@ refactor this code so the player icons display inline at the beginning and end o
   align-items: center;
   position: relative;
   cursor: pointer;
+  font-size: 4rem;
 }
 
-.cell::after {
+.cell:not(.marked):hover::before {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  background-color: lightpink;
   content: attr(data-icon);
+  opacity: 0.5;
 }
 
 .footer {
@@ -108,7 +118,8 @@ refactor this code so the player icons display inline at the beginning and end o
     background: orange;
   }
 
-  .cell {
+  .cell,
+  .cell:hover::before {
     height: 33vw;
     width: 33vw;
   }

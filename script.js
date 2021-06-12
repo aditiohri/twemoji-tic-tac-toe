@@ -1,6 +1,6 @@
 import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
 
-const card = document.querySelector("[data-card]")
+const card = document.querySelector("[data-card]");
 const board = document.getElementById("board");
 const startBtn = document.querySelector("#start");
 const playerIconBtns = document.querySelector("[data-avatars]");
@@ -52,21 +52,27 @@ function clearBoard() {
 function createCell() {
   let cell = document.createElement("div");
   cell.classList.add("cell");
-  cell.setAttribute("data-icon", state.playerIcons.player1)
+  cell.setAttribute("data-icon", state.playerIcons.player1);
   cell.addEventListener("click", handleCellClick, { once: true });
   return cell;
 }
 
 function handleCellClick(event) {
-  console.log(event.target, " clicked");
+  console.log(event.target.dataset, " clicked");
+  const cell = event.target;
+  const emoji = cell.dataset.icon;
+  const markCell = document.createElement("span");
+  markCell.textContent = emoji;
+  cell.append(markCell);
+  cell.classList.add("marked")
 }
 
 function setPlayerEmojiPickers() {
   // before players have chosen emojis
-  // set start button as disabled 
+  // set start button as disabled
   startBtn.disabled = true;
   // for each player
-  // set up unique emoji picker 
+  // set up unique emoji picker
   playerBtns.forEach((playerBtn) => {
     const [player, btn] = playerBtn;
     const playerIcon = document.querySelector(`#${player}Icon`);
