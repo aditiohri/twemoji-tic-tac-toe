@@ -6,8 +6,8 @@
 
 :root {
   --cell-size-desktop: 200px;
-  --emoji-size-desktop: calc((var --cell-size-desktop) * 0.9);
-  --emoji-size-mobile: calc(33vw * 0.9);
+  --emoji-size-desktop: 8rem;
+  --emoji-size-mobile: 4rem;
 }
 
 body {
@@ -51,10 +51,9 @@ body {
 }
 
 .players span {
-  font-size: 4rem;
+  font-size: var(--emoji-size-mobile);
 }
-/* 
-refactor this code so the player icons display inline at the beginning and end of the parent, respectively
+
 .avatars {
   display: flex;
   align-items: center;
@@ -63,7 +62,7 @@ refactor this code so the player icons display inline at the beginning and end o
 
 .players {
   display: inline;
-} */
+}
 
 .board {
   background: lightgrey;
@@ -86,17 +85,17 @@ refactor this code so the player icons display inline at the beginning and end o
   align-items: center;
   position: relative;
   cursor: pointer;
-  font-size: 4rem;
+  font-size: var(--emoji-size-desktop);
 }
 
-.cell:not(.marked):hover::before {
-  height: 100%;
-  width: 100%;
-  display: grid;
-  place-items: center;
-  background-color: lightpink;
-  content: attr(data-icon);
-  opacity: 0.5;
+.hover {
+  content: "";
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    background-color: lightpink;
+    opacity: 0.5;
 }
 
 .footer {
@@ -112,15 +111,17 @@ refactor this code so the player icons display inline at the beginning and end o
     padding: 0.25rem;
   }
 
-  .gameboard {
+  .board {
     height: 100vw;
     width: 100vw;
-    background: orange;
+  }
+  .players span {
+    font-size: var(--emoji-size-mobile);
   }
 
-  .cell,
-  .cell:hover::before {
+  .cell {
     height: 33vw;
     width: 33vw;
+    font-size: var(--emoji-size-mobile);
   }
 }

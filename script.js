@@ -4,7 +4,8 @@ const card = document.querySelector("[data-card]");
 const board = document.getElementById("board");
 const startBtn = document.querySelector("#start");
 const playerIconBtns = document.querySelector("[data-avatars]");
-const emojiOptions = { autoHide: false, position: "top-start" };
+
+const emojiOptions = { position: "top-start" };
 const playerBtns = [
   ["player1", document.querySelector("#player1Btn")],
   ["player2", document.querySelector("#player2Btn")],
@@ -15,56 +16,87 @@ const emojiBtns = {
 };
 
 let state = {
+  // refactor into class constructor
   player1: true,
   playerIcons: {
     player1: "",
     player2: "",
   },
-  players: {
-    one: true,
-    two: false,
+  playerMoves: {
+    player1: [],
+    player2: [],
   },
   winningOutcomes: [],
   winner: "",
 };
+
+const findPlayerEmoji = () =>
+  state.player1 ? state.playerIcons.player1 : state.playerIcons.player2;
 
 setPlayerEmojiPickers();
 
 startBtn.addEventListener("click", startGame);
 // create game board
 function startGame() {
-  // move emojis above board
+  // move player emojis above board
   card.insertBefore(playerIconBtns, board);
   // remove existing children of board
-  clearBoard();
+  removeChildren(board);
   // add 9 cells to board
   for (let cells = 0; cells < 9; cells++) {
     board.appendChild(createCell());
+    // here is where we could update state with an array from all the board cells
   }
 }
 
-function clearBoard() {
-  while (board.firstChild) {
-    board.removeChild(board.firstChild);
+function removeChildren(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
   }
 }
 
 function createCell() {
   let cell = document.createElement("div");
   cell.classList.add("cell");
-  cell.setAttribute("data-icon", state.playerIcons.player1);
   cell.addEventListener("click", handleCellClick, { once: true });
+  cell.addEventListener("mouseover", handleCellHover); 
+  cell.addEventListener("mouseleave", handleCellLeave);
   return cell;
 }
 
-function handleCellClick(event) {
-  console.log(event.target.dataset, " clicked");
+function handleCellHover(event) {
   const cell = event.target;
-  const emoji = cell.dataset.icon;
-  const markCell = document.createElement("span");
-  markCell.textContent = emoji;
-  cell.append(markCell);
-  cell.classList.add("marked")
+  if (!cell.classList.contains("marked")) {
+    const emoji = findPlayerEmoji();
+    cell.append(emoji);
+    cell.classList.add("hover");
+  }
+}
+
+function handleCellLeave(event) {
+  const cell = event.target;
+  if (cell.classList.contains("hover")) {
+    cell.classList.remove("hover");
+    if (!cell.classList.contains("marked")) {
+      removeChildren(cell);
+    }
+  }
+}
+
+function handleCellClick(event) {
+  const cell = event.target;
+  // add index of cell to player moves array in state
+  markCell(cell);
+  swapTurns();
+}
+
+function markCell(cell) {
+  cell.classList.remove("hover");
+  cell.classList.add("marked");
+}
+
+function swapTurns() {
+  state.player1 = !state.player1;
 }
 
 function setPlayerEmojiPickers() {
