@@ -1,24 +1,45 @@
 import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
 
-const picker = new EmojiButton({ autoHide: false });
-const trigger = document.querySelector("#emoji-trigger");
-const gameboard = document.getElementById("gameboard");
+const board = document.getElementById("board");
 const startBtn = document.querySelector("#start");
+const playerBtns = [
+  ["player1", document.querySelector("#player1Btn")],
+  ["player2", document.querySelector("#player2Btn")],
+];
+const emojiBtns = {
+  player1Btn: new EmojiButton({ autoHide: false, position: "top-start" }),
+  player2Btn: new EmojiButton({ autoHide: false, position: "top-start" }),
+};
+
+let state = {
+  currentPlayer: "",
+  playerIcons: {
+    player1: "",
+    player2: "",
+  },
+  players: {
+    one: true,
+    two: false,
+  },
+  winningOutcomes: [],
+  winner: "",
+};
 
 startBtn.addEventListener("click", startGame);
 // create game board
 function startGame() {
-  // remove existing children of gameboard
+  // remove existing children of board
   clearBoard();
-  // add 9 cells to gameboard
+  // add 9 cells to board
   for (let cells = 0; cells < 9; cells++) {
-    gameboard.appendChild(createCell());
+    board.appendChild(createCell());
   }
+  setPlayerEmojiPickers();
 }
 
 function clearBoard() {
-  while (gameboard.firstChild) {
-    gameboard.removeChild(gameboard.firstChild);
+  while (board.firstChild) {
+    board.removeChild(board.firstChild);
   }
 }
 
@@ -33,37 +54,15 @@ function handleCellClick(event) {
   console.log(event.target, " clicked");
 }
 
-let currentPlayer;
-let notCurrentPlayer;
-
-function setCurrentPlayer() {
-  return [
-    (currentPlayer = currentPlayer === "player1" ? "player2" : "player1"),
-    (notCurrentPlayer = currentPlayer === "player2" ? "player1" : "player2"),
-  ];
+function setPlayerEmojiPickers() {
+  playerBtns.forEach((playerBtn) => {
+    const [player, btn] = playerBtn;
+    const playerIcon = document.querySelector(`#${player}Icon`);
+    const emojiPicker = emojiBtns[btn.id];
+    emojiPicker.on("emoji", (selection) => {
+      state.playerIcons[player] = selection.emoji;
+      playerIcon.textContent = state.playerIcons[player];
+    });
+    btn.addEventListener("click", () => emojiPicker.togglePicker(btn));
+  });
 }
-
-function setPlayerEmojiIcon(selection, currentPlayer, notCurrentPlayer) {
-  let player = document.querySelector(`#${currentPlayer}`);
-  let notPlayer = document.querySelector(`#${notCurrentPlayer}`);
-  player.textContent = selection.emoji;
-  let playerIcon = player.textContent;
-  let notPlayerIcon = notPlayer.textContent;
-  // if (notPlayerIcon.length > 0 && playerIcon === notPlayerIcon) {
-  //   player.textContent =
-  //     "Player Emojis must be different - choose another one!";
-  //   setPlayerEmojiIcon(selection, currentPlayer, notCurrentPlayer);
-  // } else {
-  //   return playerIcon;
-  // }
-}
-
-picker.on("emoji", (selection) => {
-  // finds which player's turn it is
-  [currentPlayer, notCurrentPlayer] = setCurrentPlayer();
-  // sets the current player's emoji to the selected emoji
-  setPlayerEmojiIcon(selection, currentPlayer, notCurrentPlayer);
-  // checks that both players' icons are not the same
-});
-
-trigger.addEventListener("click", () => picker.togglePicker(trigger));
