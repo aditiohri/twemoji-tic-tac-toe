@@ -85,6 +85,10 @@ refactor this code so the player icons display inline at the beginning and end o
   cursor: pointer;
 }
 
+.cell::after {
+  content: attr(data-icon);
+}
+
 .footer {
   background: wheat;
   padding: 2rem;
