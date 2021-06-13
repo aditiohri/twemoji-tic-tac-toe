@@ -39,14 +39,42 @@ startBtn.addEventListener("click", startGame);
 // create game board
 function startGame() {
   // move player emojis above board
-  card.insertBefore(playerIconBtns, board);
+  moveEmojiIconsAboveBoard();
   // remove existing children of board
   removeChildren(board);
   // add 9 cells to board
   for (let cells = 0; cells < 9; cells++) {
     board.appendChild(createCell());
-    // here is where we could update state with an array from all the board cells
+    // here is where we could update state with an array of all the board cells
   }
+  addResetBtn();
+}
+
+function addResetBtn() {
+  let resetBtn = document.createElement("button");
+  resetBtn.textContent = "Start Over"
+  resetBtn.addEventListener("click", resetGame);
+  card.appendChild(resetBtn);
+}
+
+function resetGame(event) {
+  removeChildren(board);
+  setPlayerEmojiPickers();
+  event.target.classList.add("hide");
+}
+
+function moveEmojiIconsAboveBoard() {
+  playerBtns.forEach((btn) => {
+    let btnEl = btn[1];
+    btnEl.parentNode.removeChild(btnEl);
+  });
+  playerIconBtns.style.display = "flex";
+  playerIconBtns.style.alignItems = "center";
+  let versus = document.createElement("span");
+  versus.textContent = "VS";
+  let players = document.querySelectorAll(".players");
+  playerIconBtns.insertBefore(versus, players[1]);
+  card.insertBefore(playerIconBtns, board);
 }
 
 function removeChildren(element) {
@@ -59,7 +87,7 @@ function createCell() {
   let cell = document.createElement("div");
   cell.classList.add("cell");
   cell.addEventListener("click", handleCellClick, { once: true });
-  cell.addEventListener("mouseover", handleCellHover); 
+  cell.addEventListener("mouseover", handleCellHover);
   cell.addEventListener("mouseleave", handleCellLeave);
   return cell;
 }
@@ -114,9 +142,10 @@ function setPlayerEmojiPickers() {
       state.playerIcons[player] = selection.emoji;
       playerIcon.textContent = state.playerIcons[player];
       // if both players have emojis set
-      // activate the start button
       if (state.playerIcons.player1 && state.playerIcons.player2) {
+        // activate the start button
         startBtn.disabled = false;
+        startBtn.classList.remove("hide");
       }
     });
     btn.addEventListener("click", () => emojiPicker.togglePicker(btn));

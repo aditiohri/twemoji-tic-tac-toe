@@ -3,18 +3,11 @@ LEGEND
 👈 = in process
 
 TO DO
+- I can restart the game at any time 👈 
 
-- style player picker buttons 👈
-
-* on load
-* on start
-* adjust game start layout so that player picker buttons/prompts are horizontally opposite above the gameboard top border
-
-- The token I choose will be different from the one my opponent chooses 
-
+- The token I choose will be different from the one my opponent chooses
 * start button does not appear on screen until two different tokens chosen
 * user sees an error message if they choose the same token
-
 
 AAUser,
 
@@ -32,7 +25,6 @@ MVP
 - Once it is player 2's turn, they can see their emoji when hovering over a tile ✅
   - on their turn, when player 2 clicks on a tile, their emoji is visible inside ✅
   - The token I choose will be different from the one my opponent chooses
-- I can restart the game at any time
 - I can see the winning / losing / tied outcome of the game
 - Once the game is over, I cannot click any of the cells until I hit restart btn
 
