@@ -8,6 +8,7 @@
   --cell-size-desktop: 200px;
   --emoji-size-desktop: 8rem;
   --emoji-size-mobile: 4rem;
+  --color-bg: lightcyan;
 }
 
 body {
@@ -48,6 +49,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+button {
+  background: linear-gradient(var(--color-bg), var(--color-bg)) padding-box, linear-gradient(to right, darkblue, darkorchid) border-box;
+  border-radius: 50em;
+  border: 4px solid transparent;
+  cursor: grab;
 }
 
 .players span {
