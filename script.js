@@ -83,13 +83,17 @@ function createCell() {
   return cell;
 }
 
+function addEmojiToCell(cell) {
+  const emoji = state.player1
+    ? state.playerIcons.player1
+    : state.playerIcons.player2;
+  cell.append(emoji);
+}
+
 function handleCellHover(event) {
   const cell = event.target;
   if (!cell.classList.contains("marked")) {
-    const emoji = state.player1
-      ? state.playerIcons.player1
-      : state.playerIcons.player2;
-    cell.append(emoji);
+    addEmojiToCell(cell);
     cell.classList.add("hover");
   }
 }
@@ -106,6 +110,9 @@ function handleCellLeave(event) {
 
 function handleCellClick(event) {
   const cell = event.target;
+  if (!cell.hasChildNodes()) {
+    addEmojiToCell(cell);
+  }
   // add index of cell to player moves array in state to track winner
   markCell(cell);
   swapTurns();
