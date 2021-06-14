@@ -82,8 +82,8 @@ button {
   justify-content: space-between;
 }
 
-.players button {
-  margin: 10px;
+.card button {
+  margin: 20px;
 }
 
 .board {
