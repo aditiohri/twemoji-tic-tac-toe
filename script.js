@@ -44,7 +44,7 @@ function addResetBtn() {
 
 function resetGame(event) {
   for (let token in state.playerIcons) {
-    state.playerIcons[token] = ""
+    state.playerIcons[token] = "";
   }
   removeChildren(card);
   setPlayerEmojiPickers();
@@ -60,13 +60,11 @@ function moveEmojiIconsAboveBoard() {
     let btnEl = btn[1];
     btnEl.parentNode.removeChild(btnEl);
   });
-  const playerIconBtns = document.querySelector("#avatars");
-  playerIconBtns.style.display = "flex";
-  playerIconBtns.style.alignItems = "center";
+  let playerIconBtns = document.querySelector("#avatars");
   let versus = document.createElement("span");
   versus.textContent = "VS";
-  let players = document.querySelectorAll(".players");
-  playerIconBtns.insertBefore(versus, players[1]);
+  let players = document.querySelector(".players");
+  players.after(versus);
   card.insertBefore(playerIconBtns, board);
 }
 
@@ -108,7 +106,7 @@ function handleCellLeave(event) {
 
 function handleCellClick(event) {
   const cell = event.target;
-  // add index of cell to player moves array in state
+  // add index of cell to player moves array in state to track winner
   markCell(cell);
   swapTurns();
 }
@@ -144,7 +142,7 @@ function setBoard() {
     id: "start",
     disabled: true,
   });
-  startBtn.textContent = "START GAME"
+  startBtn.textContent = "START GAME";
   startBtn.addEventListener("click", startGame);
   return [board, instructions, avatars, startBtn];
 }
@@ -162,11 +160,12 @@ function setPlayerEmojiPickers() {
     let btn = createElement("button", {
       id: `player${playerNum}Btn`,
     });
-    btn.textContent = `${player}, Pick an Emoji!`;
+    btn.textContent = `${player}`;
     let emojiPicker = new EmojiButton(emojiOptions);
     let emojiToken = createElement("span", {
       id: `player${playerNum}Icon`,
     });
+    console.log(emojiToken);
     emojiPicker.on("emoji", (selection) => {
       // create element for the emoji
       btn.before(emojiToken);

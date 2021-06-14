@@ -65,13 +65,14 @@ button {
 
 .players span {
   font-size: var(--emoji-size-mobile);
-  height: 4rem;
-  width: 4rem;
+  height: var(--emoji-size-mobile);
+  width: var(--emoji-size-mobile);
   margin: 1rem;
 }
 
 .avatars {
-  display: grid;
+  display: flex;
+  align-items: flex-end;
 }
 
 .players {
@@ -79,6 +80,10 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+}
+
+.players button {
+  margin: 10px;
 }
 
 .board {
