@@ -149,7 +149,6 @@ function setBoard() {
     id: "start",
     disabled: true,
   });
-  startBtn.textContent = "START GAME";
   startBtn.addEventListener("click", startGame);
   return [board, instructions, avatars, startBtn];
 }
@@ -179,10 +178,17 @@ function setPlayerEmojiPickers() {
       emojiToken.textContent = state.playerTokens[`player${playerNum}`];
       // place the emoji token element before the btn element
       // if both players have emojis set
-      if (state.playerTokens.player1 && state.playerTokens.player2) {
+      const { player1, player2 } = state.playerTokens;
+      if (player1 && player2) {
         // activate the start button
-        startBtn.disabled = false;
         startBtn.classList.remove("hide");
+        if (player1 === player2) {
+          startBtn.textContent = "Players must choose different emojis 😣";
+          startBtn.disabled = true;
+        } else if (player1 !== player2) {
+          startBtn.textContent = "START GAME";
+          startBtn.disabled = false;
+        }
       }
     });
     btn.addEventListener("click", () => {

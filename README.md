@@ -3,10 +3,7 @@ LEGEND
 👈 = in process
 
 TO DO
-
-- replace all "icon" with "token"
-
-- The token I choose will be different from the one my opponent chooses
+- The token I choose will be different from the one my opponent chooses 👈
 * start button does not appear on screen until two different tokens chosen
 * user sees an error message if they choose the same token
 
@@ -14,9 +11,7 @@ AAUser,
 
 MVP
 
-- I can play this game on tablet, phone and desktop
-  - update hover style for tablet and phone
-  - update font-sizes for tablet
+- I can play this game on tablet, phone and desktop ✅
 - I can choose an emoji as my tic tac toe token ✅
   - The Emoji Pickers for each player show up on page load ✅
   - You can only click the start button once both avatars are set ✅
