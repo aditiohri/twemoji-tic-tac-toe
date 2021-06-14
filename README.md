@@ -3,7 +3,7 @@ LEGEND
 👈 = in process
 
 TO DO
-- I can restart the game at any time 👈 
+
 - replace all "icon" with "token"
 
 - The token I choose will be different from the one my opponent chooses

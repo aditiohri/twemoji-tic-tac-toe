@@ -7,7 +7,7 @@ const emojiOptions = { position: "top-start" };
 let state = {
   // refactor into class constructor?
   player1: true,
-  playerIcons: {
+  playerTokens: {
     player1: "",
     player2: "",
   },
@@ -24,7 +24,7 @@ setPlayerEmojiPickers();
 // create game board
 function startGame() {
   // move player emojis above board
-  moveEmojiIconsAboveBoard();
+  moveEmojiTokensAboveBoard();
   // remove existing children of board
   removeChildren(board);
   // add 9 cells to board
@@ -43,15 +43,15 @@ function addResetBtn() {
 }
 
 function resetGame(event) {
-  for (let token in state.playerIcons) {
-    state.playerIcons[token] = "";
+  for (let token in state.playerTokens) {
+    state.playerTokens[token] = "";
   }
   removeChildren(card);
   setPlayerEmojiPickers();
   event.target.remove();
 }
 
-function moveEmojiIconsAboveBoard() {
+function moveEmojiTokensAboveBoard() {
   const playerBtns = [
     ["player1", document.querySelector("#player1Btn")],
     ["player2", document.querySelector("#player2Btn")],
@@ -60,12 +60,12 @@ function moveEmojiIconsAboveBoard() {
     let btnEl = btn[1];
     btnEl.parentNode.removeChild(btnEl);
   });
-  let playerIconBtns = document.querySelector("#avatars");
+  let playerTokenBtns = document.querySelector("#avatars");
   let versus = document.createElement("span");
   versus.textContent = "VS";
   let players = document.querySelector(".players");
   players.after(versus);
-  card.insertBefore(playerIconBtns, board);
+  card.insertBefore(playerTokenBtns, board);
 }
 
 function removeChildren(element) {
@@ -85,8 +85,8 @@ function createCell() {
 
 function addEmojiToCell(cell) {
   const emoji = state.player1
-    ? state.playerIcons.player1
-    : state.playerIcons.player2;
+    ? state.playerTokens.player1
+    : state.playerTokens.player2;
   cell.append(emoji);
 }
 
@@ -170,17 +170,16 @@ function setPlayerEmojiPickers() {
     btn.textContent = `${player}`;
     let emojiPicker = new EmojiButton(emojiOptions);
     let emojiToken = createElement("span", {
-      id: `player${playerNum}Icon`,
+      id: `player${playerNum}Token`,
     });
-    console.log(emojiToken);
     emojiPicker.on("emoji", (selection) => {
       // create element for the emoji
       btn.before(emojiToken);
-      state.playerIcons[`player${playerNum}`] = selection.emoji;
-      emojiToken.textContent = state.playerIcons[`player${playerNum}`];
+      state.playerTokens[`player${playerNum}`] = selection.emoji;
+      emojiToken.textContent = state.playerTokens[`player${playerNum}`];
       // place the emoji token element before the btn element
       // if both players have emojis set
-      if (state.playerIcons.player1 && state.playerIcons.player2) {
+      if (state.playerTokens.player1 && state.playerTokens.player2) {
         // activate the start button
         startBtn.disabled = false;
         startBtn.classList.remove("hide");
