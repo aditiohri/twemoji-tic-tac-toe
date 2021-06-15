@@ -1,27 +1,34 @@
 import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
 
-const card = document.querySelector("[data-card]");
-
-const emojiOptions = { position: "top-start" };
-
 let state = {
-  // refactor into class constructor?
   player1: true,
   playerTokens: {
     player1: "",
     player2: "",
   },
+  arrayOfCells: () => Array.from(document.getElementById("board").children),
   playerMoves: {
     player1: [],
     player2: [],
   },
-  winningOutcomes: [],
+  winningOutcomes: [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ],
   winner: "",
 };
 
-setPlayerEmojiPickers();
+const card = document.querySelector("[data-card]");
+const emojiOptions = { position: "top-start" };
+const getCurrentPlayer = () => (state.player1 ? "player1" : "player2");
+document.body.onload = setPlayerEmojiPickers();
 
-// create game board
 function startGame() {
   // move player emojis above board
   moveEmojiTokensAboveBoard();
@@ -30,7 +37,6 @@ function startGame() {
   // add 9 cells to board
   for (let cells = 0; cells < 9; cells++) {
     board.appendChild(createCell());
-    // here is where we could update state with an array of all the board cells
   }
   addResetBtn();
 }
@@ -46,6 +52,7 @@ function resetGame(event) {
   for (let token in state.playerTokens) {
     state.playerTokens[token] = "";
   }
+  state.playerMoves.forEach((movesArr) => (movesArr = []));
   removeChildren(card);
   setPlayerEmojiPickers();
   event.target.remove();
@@ -53,12 +60,11 @@ function resetGame(event) {
 
 function moveEmojiTokensAboveBoard() {
   const playerBtns = [
-    ["player1", document.querySelector("#player1Btn")],
-    ["player2", document.querySelector("#player2Btn")],
+    document.querySelector("#player1Btn"),
+    document.querySelector("#player2Btn"),
   ];
   playerBtns.forEach((btn) => {
-    let btnEl = btn[1];
-    btnEl.parentNode.removeChild(btnEl);
+    btn.parentNode.removeChild(btn);
   });
   let playerTokenBtns = document.querySelector("#avatars");
   let versus = document.createElement("span");
@@ -100,11 +106,9 @@ function handleCellHover(event) {
 
 function handleCellLeave(event) {
   const cell = event.target;
-  if (cell.classList.contains("hover")) {
-    cell.classList.remove("hover");
-    if (!cell.classList.contains("marked")) {
-      removeChildren(cell);
-    }
+  cell.classList.remove("hover");
+  if (!cell.classList.contains("marked")) {
+    removeChildren(cell);
   }
 }
 
@@ -113,14 +117,48 @@ function handleCellClick(event) {
   if (!cell.hasChildNodes()) {
     addEmojiToCell(cell);
   }
-  // add index of cell to player moves array in state to track winner
   markCell(cell);
-  swapTurns();
+  updatePlayerMoves(cell);
+  checkWin();
 }
 
 function markCell(cell) {
-  cell.classList.remove("hover");
   cell.classList.add("marked");
+}
+
+function updatePlayerMoves(cell) {
+  const cellIdx = state.arrayOfCells().indexOf(cell);
+  state.playerMoves[getCurrentPlayer()].push(cellIdx);
+}
+
+function checkWin() {
+  const currentPlayerMoves = state.playerMoves[getCurrentPlayer()];
+  console.log(currentPlayerMoves);
+  if (currentPlayerMoves.length > 2) {
+    // for each of the winning outcomes arrays
+    const win = state.winningOutcomes.some((winningArr) => {
+      // if all of one of the array numbers
+      // are in the current players moves array
+      // the player has won
+      return winningArr.every((num) => currentPlayerMoves.includes(num));
+    });
+    console.log("checked win: ", win);
+    if (win) {
+      state.winner = getCurrentPlayer();
+      console.log(state.winner, "is the winner!"); // TODO code UI for win message
+      return; // TODO deactivate all event listeners on the board
+      // if both players have 3+ items in their playerMoves array
+      // it's a tie
+    } else if (checkTie() === true) {
+      console.log("nobody wins it sa tieeee");
+      return;
+    } else swapTurns();
+  } else swapTurns();
+}
+
+function checkTie() {
+  const { player1, player2 } = state.playerMoves;
+  return player1.length === player2.length && player1.length > 3;
 }
 
 function swapTurns() {
@@ -153,6 +191,7 @@ function setBoard() {
   return [board, instructions, avatars, startBtn];
 }
 
+// TO DO break into smaller functions
 function setPlayerEmojiPickers() {
   // create board element
   let [board, instructions, avatars, startBtn] = setBoard();
@@ -179,11 +218,11 @@ function setPlayerEmojiPickers() {
       // place the emoji token element before the btn element
       // if both players have emojis set
       const { player1, player2 } = state.playerTokens;
+      // check if players' emojis are the same
       if (player1 && player2) {
-        // activate the start button
         startBtn.classList.remove("hide");
         if (player1 === player2) {
-          startBtn.textContent = "Players must choose different emojis 😣";
+          startBtn.textContent = "Players must choose different emojis 🤨";
           startBtn.disabled = true;
         } else if (player1 !== player2) {
           startBtn.textContent = "START GAME";

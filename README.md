@@ -3,9 +3,11 @@ LEGEND
 👈 = in process
 
 TO DO
-- The token I choose will be different from the one my opponent chooses 👈
-* start button does not appear on screen until two different tokens chosen
-* user sees an error message if they choose the same token
+- I can see the winning / tied outcome of the game 👈
+ + set up win logic
+ + show win / tie message as an overlay over the gameboard div
+ + user can dismiss message
+ + user cannot keep playing if any empty cells, they must click restart to play
 
 AAUser,
 
@@ -20,7 +22,7 @@ MVP
     - when player 1 clicks on a tile, their emoji is visible inside ✅
 - Once it is player 2's turn, they can see their emoji when hovering over a tile ✅
   - on their turn, when player 2 clicks on a tile, their emoji is visible inside ✅
-  - The token I choose will be different from the one my opponent chooses
+  - The token I choose will be different from the one my opponent chooses ✅
 - I can see the winning / losing / tied outcome of the game
 - Once the game is over, I cannot click any of the cells until I hit restart btn
 
@@ -36,6 +38,11 @@ POST MVP
 
 AADev,
 
+- Separate code into 
+  + js dom functionality
+  + board set up
+  + game play logic
+  + game win logic
 - I can test the following functionality:
   - winning / losing / tied outcomes
   - a server is running ?
