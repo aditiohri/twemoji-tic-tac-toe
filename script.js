@@ -1,15 +1,42 @@
 import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
 
-let createDOM = {
+const emojiOptions = { position: "top-start" };
+const card = document.querySelector("[data-card]");
+document.addEventListener("DOMContentLoaded", initEmojiPickerAndGameBoard);
+
+const createDOM = {
   message: createElement("div"),
+  board: createElement("div", { class: "board", id: "board" }),
+  instructions: createElement("div", { class: "instructions" }),
+  avatars: createElement("div", {
+    class: "avatars",
+    id: "avatars",
+  }),
+  startBtn: createElement("button", {
+    class: "hide",
+    id: "start",
+    disabled: true,
+  }),
+  playerDiv: createElement("div", { class: "players" }),
+  playerBtn: (playerNum) =>
+    createElement("button", {
+      id: `player${playerNum}Btn`,
+    }),
+  emojiToken: (playerNum) =>
+    createElement("span", {
+      id: `player${playerNum}Token`,
+    }),
 };
 
 let accessDOM = {
+  card: () => document.querySelector("[data-card]"),
   avatars: () => document.getElementById("avatars"),
   board: () => document.getElementById("board"),
+  arrayOfCells: () => Array.from(document.getElementById("board").children),
 };
 
 let state = {
+  allPlayers: ["Player One", "Player Two"],
   player1: true,
   playerTokens: {
     player1: "",
@@ -32,10 +59,6 @@ let state = {
   ],
   gameOver: false,
 };
-
-const emojiOptions = { position: "top-start" };
-const card = document.querySelector("[data-card]");
-document.body.onload = setPlayerEmojiPickers();
 
 function getCurrentPlayer() {
   return state.player1 ? "player1" : "player2";
@@ -67,9 +90,9 @@ function resetGame(event) {
   for (let player in state.playerMoves) {
     state.playerMoves[player] = [];
   }
-  removeChildren(card);
-  setPlayerEmojiPickers();
   event.target.remove();
+  removeChildren(card);
+  initEmojiPickerAndGameBoard();
 }
 
 function moveEmojiTokensAboveBoard() {
@@ -175,7 +198,7 @@ function checkWin() {
       createDOM.message.textContent = `${state.playerTokens[winner]} is the winner!`;
       console.log("avatars", accessDOM.avatars());
       deactivateCells();
-      accessDOM.avatars().replaceWith(createDOM.message);
+      accessDOM.avatars().replaceWith(createDOM.message); // set reset button text to "Play Again"
       return; // TODO deactivate all event listeners on the board
       // if both players have 3+ items in their playerMoves array
       // it's a tie
@@ -208,50 +231,52 @@ function createElement(elementType, attributes) {
   return element;
 }
 
-function setBoard() {
-  let board = createElement("div", { class: "board", id: "board" });
-  let instructions = createElement("div", { class: "instructions" });
-  let avatars = createElement("div", {
-    class: "avatars",
-    id: "avatars",
+
+function initEmojiPickerAndGameBoard() {
+  // create board element
+  createDOM.startBtn.addEventListener("click", startGame);
+  createDOM.instructions.append(createDOM.startBtn);
+  let emojiPickers = createEmojiPickers(createDOM.startBtn);
+  emojiPickers.forEach((picker) => {
+    createDOM.avatars.append(picker);
   });
-  let startBtn = createElement("button", {
-    class: "hide",
-    id: "start",
-    disabled: true,
-  });
-  startBtn.addEventListener("click", startGame);
-  return [board, instructions, avatars, startBtn];
+  createDOM.instructions.appendChild(createDOM.avatars);
+  createDOM.board.appendChild(createDOM.instructions);
+  accessDOM.card().appendChild(createDOM.board);
 }
 
-// TO DO break into smaller functions
-function setPlayerEmojiPickers() {
-  // create board element
-  let [board, instructions, avatars, startBtn] = setBoard();
-  instructions.append(startBtn);
-  // for each player
-  let emojiPickers = ["Player One", "Player Two"].map((player, idx) => {
+function createEmojiPickers(startBtn) {
+  return state.allPlayers.map((player, idx) => {
     let playerNum = idx + 1;
-    // create player div
-    let div = createElement("div", { class: "players" });
     // create emoji picker button
-    let btn = createElement("button", {
-      id: `player${playerNum}Btn`,
-    });
+    let btn = createDOM.playerBtn(playerNum);
     btn.textContent = `${player}`;
+    // create emoji picker event
     let emojiPicker = new EmojiButton(emojiOptions);
-    let emojiToken = createElement("span", {
-      id: `player${playerNum}Token`,
-    });
     emojiPicker.on("emoji", (selection) => {
-      // create element for the emoji
-      btn.before(emojiToken); // why doesn't this work when i move this above the emojipicker event listener fn?
-      state.playerTokens[`player${playerNum}`] = selection.emoji;
-      emojiToken.textContent = state.playerTokens[`player${playerNum}`];
-      // place the emoji token element before the btn element
-      // if both players have emojis set
-      const { player1, player2 } = state.playerTokens;
+      chooseEmoji(btn, selection, playerNum)
       // check if players' emojis are the same
+      checkEmojisAreDifferent(startBtn)
+    });
+    // attach emoji picker event to button
+    btn.addEventListener("click", () => {
+      emojiPicker.togglePicker(btn);
+    });
+    // append emoji picker button to the player's div
+    createDOM.playerDiv.append(btn);
+    return createDOM.playerDiv;
+  });
+}
+
+function chooseEmoji(btn, selection, playerNum) {
+  let emojiToken = createDOM.emojiToken(playerNum);
+  state.playerTokens[`player${playerNum}`] = selection.emoji;
+  emojiToken.textContent = state.playerTokens[`player${playerNum}`];
+  btn.before(emojiToken); 
+}
+
+function checkEmojisAreDifferent(startBtn) {
+  const { player1, player2 } = state.playerTokens;
       if (player1 && player2) {
         startBtn.classList.remove("hide");
         if (player1 === player2) {
@@ -262,19 +287,4 @@ function setPlayerEmojiPickers() {
           startBtn.disabled = false;
         }
       }
-    });
-    btn.addEventListener("click", () => {
-      emojiPicker.togglePicker(btn);
-    });
-    div.append(btn);
-    return div;
-  });
-
-  emojiPickers.forEach((picker) => {
-    avatars.append(picker);
-  });
-
-  instructions.appendChild(avatars);
-  board.appendChild(instructions);
-  card.appendChild(board);
 }
