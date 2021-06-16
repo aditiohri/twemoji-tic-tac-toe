@@ -1,5 +1,14 @@
 import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
 
+let createDOM = {
+  message: createElement("div"),
+};
+
+let accessDOM = {
+  avatars: () => document.getElementById("avatars"),
+  board: () => document.getElementById("board"),
+};
+
 let state = {
   player1: true,
   playerTokens: {
@@ -21,13 +30,16 @@ let state = {
     [0, 4, 8],
     [2, 4, 6],
   ],
-  winner: "",
+  gameOver: false,
 };
 
-const card = document.querySelector("[data-card]");
 const emojiOptions = { position: "top-start" };
-const getCurrentPlayer = () => (state.player1 ? "player1" : "player2");
+const card = document.querySelector("[data-card]");
 document.body.onload = setPlayerEmojiPickers();
+
+function getCurrentPlayer() {
+  return state.player1 ? "player1" : "player2";
+}
 
 function startGame() {
   // move player emojis above board
@@ -52,7 +64,9 @@ function resetGame(event) {
   for (let token in state.playerTokens) {
     state.playerTokens[token] = "";
   }
-  state.playerMoves.forEach((movesArr) => (movesArr = []));
+  for (let player in state.playerMoves) {
+    state.playerMoves[player] = [];
+  }
   removeChildren(card);
   setPlayerEmojiPickers();
   event.target.remove();
@@ -131,6 +145,18 @@ function updatePlayerMoves(cell) {
   state.playerMoves[getCurrentPlayer()].push(cellIdx);
 }
 
+function deactivateCells() {
+  const board = accessDOM.board().children;
+  console.log(board);
+  for (let cell of board) {
+    if (!cell.className.includes("marked")) {
+      cell.removeEventListener("click", handleCellClick, false);
+      cell.removeEventListener("mouseover", handleCellHover, false);
+      cell.removeEventListener("mouseleave", handleCellLeave, false);
+    }
+  }
+}
+
 function checkWin() {
   const currentPlayerMoves = state.playerMoves[getCurrentPlayer()];
   console.log(currentPlayerMoves);
@@ -144,13 +170,20 @@ function checkWin() {
     });
     console.log("checked win: ", win);
     if (win) {
-      state.winner = getCurrentPlayer();
-      console.log(state.winner, "is the winner!"); // TODO code UI for win message
+      // TODO abstract into separate function to reuse for win and tie cases
+      const winner = getCurrentPlayer();
+      createDOM.message.textContent = `${state.playerTokens[winner]} is the winner!`;
+      console.log("avatars", accessDOM.avatars());
+      deactivateCells();
+      accessDOM.avatars().replaceWith(createDOM.message);
       return; // TODO deactivate all event listeners on the board
       // if both players have 3+ items in their playerMoves array
       // it's a tie
     } else if (checkTie() === true) {
-      console.log("nobody wins it sa tieeee");
+      createDOM.message.textContent = "nobody wins it sa tieeee";
+      console.log("avatars", accessDOM.avatars());
+      deactivateCells();
+      accessDOM.avatars().replaceWith(createDOM.message);
       return;
     } else swapTurns();
   } else swapTurns();
@@ -212,7 +245,7 @@ function setPlayerEmojiPickers() {
     });
     emojiPicker.on("emoji", (selection) => {
       // create element for the emoji
-      btn.before(emojiToken);
+      btn.before(emojiToken); // why doesn't this work when i move this above the emojipicker event listener fn?
       state.playerTokens[`player${playerNum}`] = selection.emoji;
       emojiToken.textContent = state.playerTokens[`player${playerNum}`];
       // place the emoji token element before the btn element

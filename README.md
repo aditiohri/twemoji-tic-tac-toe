@@ -3,11 +3,9 @@ LEGEND
 👈 = in process
 
 TO DO
-- I can see the winning / tied outcome of the game 👈
- + set up win logic
- + show win / tie message as an overlay over the gameboard div
- + user can dismiss message
- + user cannot keep playing if any empty cells, they must click restart to play
+REFACTORING 👈
+STYLING
+DEPLOYING
 
 AAUser,
 
@@ -23,7 +21,7 @@ MVP
 - Once it is player 2's turn, they can see their emoji when hovering over a tile ✅
   - on their turn, when player 2 clicks on a tile, their emoji is visible inside ✅
   - The token I choose will be different from the one my opponent chooses ✅
-- I can see the winning / losing / tied outcome of the game
+- I can see the winning / losing / tied outcome of the game ✅
 - Once the game is over, I cannot click any of the cells until I hit restart btn
 
 POST MVP
@@ -39,7 +37,7 @@ POST MVP
 AADev,
 
 - Separate code into 
-  + js dom functionality
+  + js dom elements - OBJECT
   + board set up
   + game play logic
   + game win logic
