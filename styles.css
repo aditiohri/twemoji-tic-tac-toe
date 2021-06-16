@@ -55,6 +55,10 @@ body {
   align-items: center;
 }
 
+.versus::after {
+  content: "VS"
+}
+
 button {
   background: linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
     linear-gradient(to right, darkblue, darkorchid) border-box;

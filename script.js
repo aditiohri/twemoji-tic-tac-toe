@@ -2,7 +2,7 @@ import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-butt
 
 const emojiOptions = { position: "top-start" };
 const card = document.querySelector("[data-card]");
-document.addEventListener("DOMContentLoaded", initEmojiPickerAndGameBoard);
+document.addEventListener("DOMContentLoaded", initEmojiPicker);
 
 const createDOM = {
   message: createElement("div"),
@@ -17,7 +17,7 @@ const createDOM = {
     id: "start",
     disabled: true,
   }),
-  playerDiv: createElement("div", { class: "players" }),
+  playerDiv: createElement("div", { class: "players", id: "players" }),
   playerBtn: (playerNum) =>
     createElement("button", {
       id: `player${playerNum}Btn`,
@@ -26,16 +26,23 @@ const createDOM = {
     createElement("span", {
       id: `player${playerNum}Token`,
     }),
+  versus: createElement("span", { class: "versus" }),
 };
 
-let accessDOM = {
+const accessDOM = {
   card: () => document.querySelector("[data-card]"),
   avatars: () => document.getElementById("avatars"),
   board: () => document.getElementById("board"),
+  playerBtns: () => [
+    document.getElementById("player1Btn"),
+    document.getElementById("player2Btn"),
+  ],
+  playerTokens: () => document.getElementById("avatars"),
+  playerDivs: () => document.getElementById("players"),
   arrayOfCells: () => Array.from(document.getElementById("board").children),
 };
 
-let state = {
+const state = {
   allPlayers: ["Player One", "Player Two"],
   player1: true,
   playerTokens: {
@@ -64,18 +71,6 @@ function getCurrentPlayer() {
   return state.player1 ? "player1" : "player2";
 }
 
-function startGame() {
-  // move player emojis above board
-  moveEmojiTokensAboveBoard();
-  // remove existing children of board
-  removeChildren(board);
-  // add 9 cells to board
-  for (let cells = 0; cells < 9; cells++) {
-    board.appendChild(createCell());
-  }
-  addResetBtn();
-}
-
 function addResetBtn() {
   let resetBtn = document.createElement("button");
   resetBtn.textContent = "Start Over";
@@ -92,38 +87,7 @@ function resetGame(event) {
   }
   event.target.remove();
   removeChildren(card);
-  initEmojiPickerAndGameBoard();
-}
-
-function moveEmojiTokensAboveBoard() {
-  const playerBtns = [
-    document.querySelector("#player1Btn"),
-    document.querySelector("#player2Btn"),
-  ];
-  playerBtns.forEach((btn) => {
-    btn.parentNode.removeChild(btn);
-  });
-  let playerTokenBtns = document.querySelector("#avatars");
-  let versus = document.createElement("span");
-  versus.textContent = "VS";
-  let players = document.querySelector(".players");
-  players.after(versus);
-  card.insertBefore(playerTokenBtns, board);
-}
-
-function removeChildren(element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
-}
-
-function createCell() {
-  let cell = document.createElement("div");
-  cell.classList.add("cell");
-  cell.addEventListener("click", handleCellClick, { once: true });
-  cell.addEventListener("mouseover", handleCellHover);
-  cell.addEventListener("mouseleave", handleCellLeave);
-  return cell;
+  initEmojiPicker();
 }
 
 function addEmojiToCell(cell) {
@@ -221,18 +185,8 @@ function swapTurns() {
   state.player1 = !state.player1;
 }
 
-function createElement(elementType, attributes) {
-  let element = document.createElement(elementType);
-  if (attributes) {
-    for (const [key, value] of Object.entries(attributes)) {
-      element.setAttribute(key, value);
-    }
-  }
-  return element;
-}
-
-
-function initEmojiPickerAndGameBoard() {
+// Emoji Picker Setup
+function initEmojiPicker() {
   // create board element
   createDOM.startBtn.addEventListener("click", startGame);
   createDOM.instructions.append(createDOM.startBtn);
@@ -251,12 +205,15 @@ function createEmojiPickers(startBtn) {
     // create emoji picker button
     let btn = createDOM.playerBtn(playerNum);
     btn.textContent = `${player}`;
+    // create emoji token element
+    let emojiToken = createDOM.emojiToken(playerNum);
     // create emoji picker event
     let emojiPicker = new EmojiButton(emojiOptions);
     emojiPicker.on("emoji", (selection) => {
-      chooseEmoji(btn, selection, playerNum)
+      // assign emoji token to player
+      chooseEmoji(btn, selection, emojiToken, playerNum);
       // check if players' emojis are the same
-      checkEmojisAreDifferent(startBtn)
+      checkEmojisAreDifferent(startBtn);
     });
     // attach emoji picker event to button
     btn.addEventListener("click", () => {
@@ -268,23 +225,71 @@ function createEmojiPickers(startBtn) {
   });
 }
 
-function chooseEmoji(btn, selection, playerNum) {
-  let emojiToken = createDOM.emojiToken(playerNum);
+function chooseEmoji(btn, selection, emojiToken, playerNum) {
   state.playerTokens[`player${playerNum}`] = selection.emoji;
   emojiToken.textContent = state.playerTokens[`player${playerNum}`];
-  btn.before(emojiToken); 
+  btn.before(emojiToken);
 }
 
 function checkEmojisAreDifferent(startBtn) {
   const { player1, player2 } = state.playerTokens;
-      if (player1 && player2) {
-        startBtn.classList.remove("hide");
-        if (player1 === player2) {
-          startBtn.textContent = "Players must choose different emojis 🤨";
-          startBtn.disabled = true;
-        } else if (player1 !== player2) {
-          startBtn.textContent = "START GAME";
-          startBtn.disabled = false;
-        }
-      }
+  if (player1 && player2) {
+    startBtn.classList.remove("hide");
+    if (player1 === player2) {
+      startBtn.textContent = "Players must choose different emojis 🤨";
+      startBtn.disabled = true;
+    } else {
+      startBtn.textContent = "START GAME";
+      startBtn.disabled = false;
+    }
+  }
+}
+
+// Game Board Set Up
+function startGame() {
+  const board = accessDOM.board();
+  moveEmojiTokensAboveBoard();
+  removeChildren(board);
+  createBoard(9, board);
+  addResetBtn();
+}
+
+function moveEmojiTokensAboveBoard() {
+  accessDOM.playerBtns().forEach((btn) => {
+    btn.parentNode.removeChild(btn);
+  });
+  accessDOM.playerDivs().firstChild.after(createDOM.versus);
+  card.insertBefore(accessDOM.playerTokens(), board);
+}
+
+function createBoard(num, board) {
+  for (let cells = 0; cells < num; cells++) {
+    board.appendChild(createCell());
+  }
+}
+
+function createCell() {
+  let cell = document.createElement("div");
+  cell.classList.add("cell");
+  cell.addEventListener("click", handleCellClick, { once: true });
+  cell.addEventListener("mouseover", handleCellHover);
+  cell.addEventListener("mouseleave", handleCellLeave);
+  return cell;
+}
+
+// DOM utilities
+function createElement(elementType, attributes) {
+  let element = document.createElement(elementType);
+  if (attributes) {
+    for (const [key, value] of Object.entries(attributes)) {
+      element.setAttribute(key, value);
+    }
+  }
+  return element;
+}
+
+function removeChildren(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
 }
