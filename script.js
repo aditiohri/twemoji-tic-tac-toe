@@ -201,7 +201,8 @@ function getCurrentPlayer() {
 }
 
 function addEmojiToCell(cell) {
-  const emoji = state.playerTokens[getCurrentPlayer()];
+  const currentPlayer = getCurrentPlayer();
+  const emoji = state.playerTokens[currentPlayer];
   cell.append(emoji);
 }
 
