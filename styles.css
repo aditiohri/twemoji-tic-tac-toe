@@ -74,7 +74,7 @@ button {
   margin: 1rem;
 }
 
-.avatars {
+.tokens {
   display: flex;
   align-items: flex-end;
 }

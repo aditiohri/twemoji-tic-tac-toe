@@ -6,10 +6,10 @@ const createDOM = {
   message: () => createElement("div"),
   board: () => createElement("div", { class: "board", id: "board" }),
   instructions: () => createElement("div", { class: "instructions" }),
-  avatars: () =>
+  tokens: () =>
     createElement("div", {
-      class: "avatars",
-      id: "avatars",
+      class: "tokens",
+      id: "tokens",
     }),
   startBtn: () =>
     createElement("button", {
@@ -33,13 +33,13 @@ const createDOM = {
 
 const accessDOM = {
   card: () => document.querySelector("[data-card]"),
-  avatars: () => document.getElementById("avatars"),
+  tokens: () => document.getElementById("tokens"),
   board: () => document.getElementById("board"),
   playerBtns: () => [
     document.getElementById("player1Btn"),
     document.getElementById("player2Btn"),
   ],
-  playerTokens: () => document.getElementById("avatars"),
+  playerTokens: () => document.getElementById("tokens"),
   playerDivs: () => document.getElementById("players"),
 };
 
@@ -73,19 +73,15 @@ initEmojiPicker();
 function initEmojiPicker() {
   const startBtn = createDOM.startBtn();
   const instructions = createDOM.instructions();
-  const avatars = createDOM.avatars();
+  const tokens = createDOM.tokens();
   const board = createDOM.board();
-  // if (accessDOM.board()) {
-  //   removeChildren(accessDOM.board())
-  // }
-  // removeChildren(accessDOM.card());
   startBtn.addEventListener("click", startGame);
   instructions.append(startBtn);
   const emojiPickers = createEmojiPickers(startBtn);
   emojiPickers.forEach((picker) => {
-    avatars.append(picker);
+    tokens.append(picker);
   });
-  instructions.appendChild(avatars);
+  instructions.appendChild(tokens);
   board.appendChild(instructions);
   accessDOM.card().appendChild(board);
 }
@@ -285,7 +281,7 @@ function displayEndMessage(messageText) {
   const message = createDOM.message();
   message.textContent = messageText;
   deactivateCells();
-  accessDOM.avatars().replaceWith(message);
+  accessDOM.tokens().replaceWith(message);
 }
 
 function checkTie() {
