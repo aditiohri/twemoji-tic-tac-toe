@@ -4,6 +4,10 @@ LEGEND
 
 TO DO
 REFACTORING 👈
+
+ - emoji adding to cell with a lag - it's too slow
+ - emoji tokens showing up when game is restarted - why? is it the win logic?
+ - change "avatars" to "tokens"
 STYLING
 DEPLOYING
 

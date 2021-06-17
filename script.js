@@ -1,23 +1,23 @@
 import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
 
 const emojiOptions = { position: "top-start" };
-const card = document.querySelector("[data-card]");
-document.addEventListener("DOMContentLoaded", initEmojiPicker);
 
 const createDOM = {
-  message: createElement("div"),
-  board: createElement("div", { class: "board", id: "board" }),
-  instructions: createElement("div", { class: "instructions" }),
-  avatars: createElement("div", {
-    class: "avatars",
-    id: "avatars",
-  }),
-  startBtn: createElement("button", {
-    class: "hide",
-    id: "start",
-    disabled: true,
-  }),
-  playerDiv: createElement("div", { class: "players", id: "players" }),
+  message: () => createElement("div"),
+  board: () => createElement("div", { class: "board", id: "board" }),
+  instructions: () => createElement("div", { class: "instructions" }),
+  avatars: () =>
+    createElement("div", {
+      class: "avatars",
+      id: "avatars",
+    }),
+  startBtn: () =>
+    createElement("button", {
+      class: "hide",
+      id: "start",
+      disabled: true,
+    }),
+  playerDiv: () => createElement("div", { class: "players", id: "players" }),
   playerBtn: (playerNum) =>
     createElement("button", {
       id: `player${playerNum}Btn`,
@@ -26,7 +26,9 @@ const createDOM = {
     createElement("span", {
       id: `player${playerNum}Token`,
     }),
-  versus: createElement("span", { class: "versus" }),
+  versus: () => createElement("span", { class: "versus" }),
+  cell: () => createElement("div"),
+  resetBtn: () => createElement("button"),
 };
 
 const accessDOM = {
@@ -39,7 +41,6 @@ const accessDOM = {
   ],
   playerTokens: () => document.getElementById("avatars"),
   playerDivs: () => document.getElementById("players"),
-  arrayOfCells: () => Array.from(document.getElementById("board").children),
 };
 
 const state = {
@@ -49,7 +50,7 @@ const state = {
     player1: "",
     player2: "",
   },
-  arrayOfCells: () => Array.from(document.getElementById("board").children),
+  arrayOfCells: () => Array.from(accessDOM.board().children),
   playerMoves: {
     player1: [],
     player2: [],
@@ -64,151 +65,41 @@ const state = {
     [0, 4, 8],
     [2, 4, 6],
   ],
-  gameOver: false,
 };
 
-function getCurrentPlayer() {
-  return state.player1 ? "player1" : "player2";
-}
-
-function addResetBtn() {
-  let resetBtn = document.createElement("button");
-  resetBtn.textContent = "Start Over";
-  resetBtn.addEventListener("click", resetGame);
-  card.appendChild(resetBtn);
-}
-
-function resetGame(event) {
-  for (let token in state.playerTokens) {
-    state.playerTokens[token] = "";
-  }
-  for (let player in state.playerMoves) {
-    state.playerMoves[player] = [];
-  }
-  event.target.remove();
-  removeChildren(card);
-  initEmojiPicker();
-}
-
-function addEmojiToCell(cell) {
-  const emoji = state.player1
-    ? state.playerTokens.player1
-    : state.playerTokens.player2;
-  cell.append(emoji);
-}
-
-function handleCellHover(event) {
-  const cell = event.target;
-  if (!cell.classList.contains("marked")) {
-    addEmojiToCell(cell);
-    cell.classList.add("hover");
-  }
-}
-
-function handleCellLeave(event) {
-  const cell = event.target;
-  cell.classList.remove("hover");
-  if (!cell.classList.contains("marked")) {
-    removeChildren(cell);
-  }
-}
-
-function handleCellClick(event) {
-  const cell = event.target;
-  if (!cell.hasChildNodes()) {
-    addEmojiToCell(cell);
-  }
-  markCell(cell);
-  updatePlayerMoves(cell);
-  checkWin();
-}
-
-function markCell(cell) {
-  cell.classList.add("marked");
-}
-
-function updatePlayerMoves(cell) {
-  const cellIdx = state.arrayOfCells().indexOf(cell);
-  state.playerMoves[getCurrentPlayer()].push(cellIdx);
-}
-
-function deactivateCells() {
-  const board = accessDOM.board().children;
-  console.log(board);
-  for (let cell of board) {
-    if (!cell.className.includes("marked")) {
-      cell.removeEventListener("click", handleCellClick, false);
-      cell.removeEventListener("mouseover", handleCellHover, false);
-      cell.removeEventListener("mouseleave", handleCellLeave, false);
-    }
-  }
-}
-
-function checkWin() {
-  const currentPlayerMoves = state.playerMoves[getCurrentPlayer()];
-  console.log(currentPlayerMoves);
-  if (currentPlayerMoves.length > 2) {
-    // for each of the winning outcomes arrays
-    const win = state.winningOutcomes.some((winningArr) => {
-      // if all of one of the array numbers
-      // are in the current players moves array
-      // the player has won
-      return winningArr.every((num) => currentPlayerMoves.includes(num));
-    });
-    console.log("checked win: ", win);
-    if (win) {
-      // TODO abstract into separate function to reuse for win and tie cases
-      const winner = getCurrentPlayer();
-      createDOM.message.textContent = `${state.playerTokens[winner]} is the winner!`;
-      console.log("avatars", accessDOM.avatars());
-      deactivateCells();
-      accessDOM.avatars().replaceWith(createDOM.message); // set reset button text to "Play Again"
-      return; // TODO deactivate all event listeners on the board
-      // if both players have 3+ items in their playerMoves array
-      // it's a tie
-    } else if (checkTie() === true) {
-      createDOM.message.textContent = "nobody wins it sa tieeee";
-      console.log("avatars", accessDOM.avatars());
-      deactivateCells();
-      accessDOM.avatars().replaceWith(createDOM.message);
-      return;
-    } else swapTurns();
-  } else swapTurns();
-}
-
-function checkTie() {
-  const { player1, player2 } = state.playerMoves;
-  return player1.length === player2.length && player1.length > 3;
-}
-
-function swapTurns() {
-  state.player1 = !state.player1;
-}
+initEmojiPicker();
 
 // Emoji Picker Setup
 function initEmojiPicker() {
-  // create board element
-  createDOM.startBtn.addEventListener("click", startGame);
-  createDOM.instructions.append(createDOM.startBtn);
-  let emojiPickers = createEmojiPickers(createDOM.startBtn);
+  const startBtn = createDOM.startBtn();
+  const instructions = createDOM.instructions();
+  const avatars = createDOM.avatars();
+  const board = createDOM.board();
+  // if (accessDOM.board()) {
+  //   removeChildren(accessDOM.board())
+  // }
+  // removeChildren(accessDOM.card());
+  startBtn.addEventListener("click", startGame);
+  instructions.append(startBtn);
+  const emojiPickers = createEmojiPickers(startBtn);
   emojiPickers.forEach((picker) => {
-    createDOM.avatars.append(picker);
+    avatars.append(picker);
   });
-  createDOM.instructions.appendChild(createDOM.avatars);
-  createDOM.board.appendChild(createDOM.instructions);
-  accessDOM.card().appendChild(createDOM.board);
+  instructions.appendChild(avatars);
+  board.appendChild(instructions);
+  accessDOM.card().appendChild(board);
 }
 
 function createEmojiPickers(startBtn) {
   return state.allPlayers.map((player, idx) => {
-    let playerNum = idx + 1;
+    const playerNum = idx + 1;
     // create emoji picker button
-    let btn = createDOM.playerBtn(playerNum);
+    const btn = createDOM.playerBtn(playerNum);
     btn.textContent = `${player}`;
     // create emoji token element
-    let emojiToken = createDOM.emojiToken(playerNum);
+    const emojiToken = createDOM.emojiToken(playerNum);
     // create emoji picker event
-    let emojiPicker = new EmojiButton(emojiOptions);
+    const emojiPicker = new EmojiButton(emojiOptions);
     emojiPicker.on("emoji", (selection) => {
       // assign emoji token to player
       chooseEmoji(btn, selection, emojiToken, playerNum);
@@ -220,8 +111,9 @@ function createEmojiPickers(startBtn) {
       emojiPicker.togglePicker(btn);
     });
     // append emoji picker button to the player's div
-    createDOM.playerDiv.append(btn);
-    return createDOM.playerDiv;
+    const playerDiv = createDOM.playerDiv();
+    playerDiv.append(btn);
+    return playerDiv;
   });
 }
 
@@ -258,26 +150,150 @@ function moveEmojiTokensAboveBoard() {
   accessDOM.playerBtns().forEach((btn) => {
     btn.parentNode.removeChild(btn);
   });
-  accessDOM.playerDivs().firstChild.after(createDOM.versus);
-  card.insertBefore(accessDOM.playerTokens(), board);
+  accessDOM.playerDivs().firstChild.after(createDOM.versus());
+  accessDOM.card().insertBefore(accessDOM.playerTokens(), accessDOM.board());
 }
 
-function createBoard(num, board) {
+function createBoard(num, element) {
   for (let cells = 0; cells < num; cells++) {
-    board.appendChild(createCell());
+    element.appendChild(createCell());
   }
 }
 
 function createCell() {
-  let cell = document.createElement("div");
+  let cell = createDOM.cell();
   cell.classList.add("cell");
-  cell.addEventListener("click", handleCellClick, { once: true });
-  cell.addEventListener("mouseover", handleCellHover);
-  cell.addEventListener("mouseleave", handleCellLeave);
+  manageEvents(cell);
   return cell;
 }
 
-// DOM utilities
+function manageEvents(element, remove = false) {
+  if (!remove) {
+    element.addEventListener("click", handleCellClick, { once: true });
+    element.addEventListener("mouseover", handleCellHover);
+    element.addEventListener("mouseleave", handleCellLeave);
+  } else {
+    element.removeEventListener("click", handleCellClick, false);
+    element.removeEventListener("mouseover", handleCellHover, false);
+    element.removeEventListener("mouseleave", handleCellLeave, false);
+  }
+}
+
+function addResetBtn() {
+  const resetBtn = createDOM.resetBtn();
+  resetBtn.textContent = "Start Over";
+  resetBtn.addEventListener("click", resetGame);
+  accessDOM.card().appendChild(resetBtn);
+}
+
+function resetGame(event) {
+  state.player1 = true;
+  initState(state.playerTokens, "");
+  initState(state.playerMoves, []);
+  removeChildren(accessDOM.card());
+  initEmojiPicker();
+  event.target.remove();
+}
+
+// Game Play Functions
+function swapTurns() {
+  state.player1 = !state.player1;
+}
+
+function getCurrentPlayer() {
+  return state.player1 ? "player1" : "player2";
+}
+
+function addEmojiToCell(cell) {
+  const emoji = state.playerTokens[getCurrentPlayer()];
+  cell.append(emoji);
+}
+
+function handleCellHover(event) {
+  const cell = event.target;
+  if (!cell.classList.contains("marked")) {
+    addEmojiToCell(cell);
+    cell.classList.add("hover");
+  }
+}
+
+function handleCellLeave(event) {
+  const cell = event.target;
+  cell.classList.remove("hover");
+  if (!cell.classList.contains("marked")) {
+    removeChildren(cell);
+  }
+}
+
+function handleCellClick(event) {
+  const cell = event.target;
+  if (!cell.hasChildNodes()) {
+    addEmojiToCell(cell);
+  }
+  markCell(cell);
+  updatePlayerMoves(cell);
+  endGameOrSwapTurns();
+}
+
+function markCell(cell) {
+  cell.classList.add("marked");
+}
+
+function updatePlayerMoves(cell) {
+  const currentPlayer = getCurrentPlayer();
+  const cellIdx = state.arrayOfCells().indexOf(cell);
+  state.playerMoves[currentPlayer] =
+    state.playerMoves[currentPlayer].concat(cellIdx);
+}
+
+// Game End Functions
+function deactivateCells() {
+  const board = accessDOM.board().children;
+  for (let cell of board) {
+    if (!cell.className.includes("marked")) {
+      manageEvents(cell, true);
+    }
+  }
+}
+
+function endGameOrSwapTurns() {
+  const currentPlayerMoves = state.playerMoves[getCurrentPlayer()];
+  if (currentPlayerMoves.length > 2) {
+    const win = state.winningOutcomes.some((winningArr) =>
+      winningArr.every((num) => currentPlayerMoves.includes(num))
+    );
+    const tie = win ? false : checkTie();
+    if (win || tie) {
+      endGame(win, tie);
+      return;
+    }
+  }
+  swapTurns();
+}
+
+function endGame(win, tie) {
+  let messageText = "";
+  if (win) {
+    messageText = `${state.playerTokens[getCurrentPlayer()]} is the winner!`;
+  } else if (tie) {
+    messageText = "No one wins! It's a tie!";
+  }
+  displayEndMessage(messageText);
+}
+
+function displayEndMessage(messageText) {
+  const message = createDOM.message();
+  message.textContent = messageText;
+  deactivateCells();
+  accessDOM.avatars().replaceWith(message);
+}
+
+function checkTie() {
+  const { player1, player2 } = state.playerMoves;
+  return player1.length === player2.length && player1.length > 3;
+}
+
+// Utility Functions
 function createElement(elementType, attributes) {
   let element = document.createElement(elementType);
   if (attributes) {
@@ -285,11 +301,19 @@ function createElement(elementType, attributes) {
       element.setAttribute(key, value);
     }
   }
-  return element;
+  return element.cloneNode(true);
 }
 
 function removeChildren(element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
+  if (element.children) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  }
+}
+
+function initState(stateVariable, initialValue) {
+  for (let key in stateVariable) {
+    stateVariable[key] = initialValue;
   }
 }
