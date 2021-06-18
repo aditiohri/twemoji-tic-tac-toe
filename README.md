@@ -3,11 +3,16 @@ LEGEND
 👈 = in process
 
 TO DO
-REFACTORING 👈
 
- - emoji adding to cell with a lag - it's too slow
- - change "avatars" to "tokens"
-STYLING
+STYLING 👈
+  - fix player buttons in place, so when user chooses emojis they do not move
+  - fix player emoji tokens above board in a row
+  - decrease size of "VS"
+  - improve look of win/tie message
+  - make header and footer smaller so UI fits on screen w/o scrolling
+    * https://stackoverflow.com/questions/37098306/this-site-appears-to-use-a-scroll-linked-positioning-effect-this-may-not-work
+  - choose a real color scheme
+  - add social links to my linkedin and github in footer
 DEPLOYING
 
 AAUser,
@@ -25,11 +30,11 @@ MVP
   - on their turn, when player 2 clicks on a tile, their emoji is visible inside ✅
   - The token I choose will be different from the one my opponent chooses ✅
 - I can see the winning / losing / tied outcome of the game ✅
-- Once the game is over, I cannot click any of the cells until I hit restart btn
+- Once the game is over, I cannot click any of the cells until I hit restart btn ✅
 
 POST MVP
 
-- I can choose to play the game with more cells (re factor game state into a constructor class or fn)
+- I can choose to play the game with more cells
 - I can change my emoji icon at any time and the changes will be reflected in the current board
 - I can choose to play against the computer
 - I can choose to play against a friend!!!!!! (websockets? chat tool?)
@@ -39,17 +44,13 @@ POST MVP
 
 AADev,
 
-- Separate code into 
-  + js dom elements - OBJECT
-  + board set up
-  + game play logic
-  + game win logic
+
 - I can test the following functionality:
   - winning / losing / tied outcomes
   - a server is running ?
   - it's responsive?
     - emojis need to be different
-    - icon is an emoji
+    - icon is an emoji and not empty string
 
 RESOURCES
 [helpful code planning](https://medium.com/swlh/tutorial-tic-tac-toe-game-with-vanilla-javascript-4857eaca59e)

@@ -35,11 +35,12 @@ const accessDOM = {
   card: () => document.querySelector("[data-card]"),
   tokens: () => document.getElementById("tokens"),
   board: () => document.getElementById("board"),
+  playerToken: (playerNum) =>
+    document.getElementById(`player${playerNum}Token`),
   playerBtns: () => [
     document.getElementById("player1Btn"),
     document.getElementById("player2Btn"),
   ],
-  playerTokens: () => document.getElementById("tokens"),
   playerDivs: () => document.getElementById("players"),
 };
 
@@ -94,11 +95,15 @@ function createEmojiPickers(startBtn) {
     btn.textContent = `${player}`;
     // create emoji token element
     const emojiToken = createDOM.emojiToken(playerNum);
+    // append emoji picker button to the player's div
+    const playerDiv = createDOM.playerDiv();
+    playerDiv.append(btn);
+    btn.before(emojiToken);
     // create emoji picker event
     const emojiPicker = new EmojiButton(emojiOptions);
     emojiPicker.on("emoji", (selection) => {
       // assign emoji token to player
-      chooseEmoji(btn, selection, emojiToken, playerNum);
+      chooseEmoji(selection, emojiToken, playerNum);
       // check if players' emojis are the same
       checkEmojisAreDifferent(startBtn);
     });
@@ -106,17 +111,15 @@ function createEmojiPickers(startBtn) {
     btn.addEventListener("click", () => {
       emojiPicker.togglePicker(btn);
     });
-    // append emoji picker button to the player's div
-    const playerDiv = createDOM.playerDiv();
-    playerDiv.append(btn);
+
     return playerDiv;
   });
 }
 
-function chooseEmoji(btn, selection, emojiToken, playerNum) {
+function chooseEmoji(selection, emojiToken, playerNum) {
   state.playerTokens[`player${playerNum}`] = selection.emoji;
   emojiToken.textContent = state.playerTokens[`player${playerNum}`];
-  btn.before(emojiToken);
+  accessDOM.playerToken(playerNum).replaceWith(emojiToken);
 }
 
 function checkEmojisAreDifferent(startBtn) {
@@ -147,7 +150,7 @@ function moveEmojiTokensAboveBoard() {
     btn.parentNode.removeChild(btn);
   });
   accessDOM.playerDivs().firstChild.after(createDOM.versus());
-  accessDOM.card().insertBefore(accessDOM.playerTokens(), accessDOM.board());
+  accessDOM.card().insertBefore(accessDOM.tokens(), accessDOM.board());
 }
 
 function createBoard(num, element) {
