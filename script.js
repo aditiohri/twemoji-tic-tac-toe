@@ -13,7 +13,7 @@ const createDOM = {
     }),
   startBtn: () =>
     createElement("button", {
-      class: "hide",
+      class: "start disabled",
       id: "start",
       disabled: true,
     }),
@@ -76,6 +76,7 @@ function initEmojiPicker() {
   const instructions = createDOM.instructions();
   const tokens = createDOM.tokens();
   const board = createDOM.board();
+  startBtn.textContent = "Pick Your Emoji Below!"
   startBtn.addEventListener("click", startGame);
   instructions.append(startBtn);
   const emojiPickers = createEmojiPickers(startBtn);
@@ -125,12 +126,12 @@ function chooseEmoji(selection, emojiToken, playerNum) {
 function checkEmojisAreDifferent(startBtn) {
   const { player1, player2 } = state.playerTokens;
   if (player1 && player2) {
-    startBtn.classList.remove("hide");
     if (player1 === player2) {
       startBtn.textContent = "Players must choose different emojis 🤨";
       startBtn.disabled = true;
     } else {
       startBtn.textContent = "START GAME";
+      startBtn.classList.remove("disabled");
       startBtn.disabled = false;
     }
   }
