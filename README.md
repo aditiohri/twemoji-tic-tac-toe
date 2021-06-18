@@ -5,8 +5,7 @@ LEGEND
 TO DO
 
 STYLING 👈
-  - improve look of win/tie message 👈
-  - make header and footer smaller so UI fits on screen w/o scrolling
+  - make header and footer smaller so UI fits on screen w/o scrolling 👈
     * https://stackoverflow.com/questions/37098306/this-site-appears-to-use-a-scroll-linked-positioning-effect-this-may-not-work
   - choose a real color scheme
   - add social links to my linkedin and github in footer

@@ -3,7 +3,7 @@ import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-butt
 const emojiOptions = { position: "top-start" };
 
 const createDOM = {
-  message: () => createElement("div"),
+  message: () => createElement("div", { class: "message" }),
   board: () => createElement("div", { class: "board", id: "board" }),
   instructions: () => createElement("div", { class: "instructions" }),
   tokens: () =>
@@ -76,7 +76,7 @@ function initEmojiPicker() {
   const instructions = createDOM.instructions();
   const tokens = createDOM.tokens();
   const board = createDOM.board();
-  startBtn.textContent = "Pick Your Emoji Below!"
+  startBtn.textContent = "Pick Your Emoji Below!";
   startBtn.addEventListener("click", startGame);
   instructions.append(startBtn);
   const emojiPickers = createEmojiPickers(startBtn);
