@@ -150,7 +150,7 @@ function moveEmojiTokensAboveBoard() {
   accessDOM.playerBtns().forEach((btn) => {
     btn.parentNode.removeChild(btn);
   });
-  accessDOM.playerDivs().firstChild.after(createDOM.versus());
+  accessDOM.playerDivs().after(createDOM.versus());
   accessDOM.card().insertBefore(accessDOM.tokens(), accessDOM.board());
 }
 

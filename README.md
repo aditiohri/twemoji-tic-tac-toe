@@ -5,10 +5,7 @@ LEGEND
 TO DO
 
 STYLING 👈
-  - fix player buttons in place, so when user chooses emojis they do not move
-  - fix player emoji tokens above board in a row
-  - decrease size of "VS"
-  - improve look of win/tie message
+  - improve look of win/tie message 👈
   - make header and footer smaller so UI fits on screen w/o scrolling
     * https://stackoverflow.com/questions/37098306/this-site-appears-to-use-a-scroll-linked-positioning-effect-this-may-not-work
   - choose a real color scheme
