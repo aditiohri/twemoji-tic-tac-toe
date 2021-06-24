@@ -34,6 +34,7 @@ const createDOM = {
 const accessDOM = {
   card: () => document.querySelector("[data-card]"),
   tokens: () => document.getElementById("tokens"),
+  header: () => document.getElementById("header"),
   board: () => document.getElementById("board"),
   playerToken: (playerNum) =>
     document.getElementById(`player${playerNum}Token`),
@@ -151,7 +152,8 @@ function moveEmojiTokensAboveBoard() {
     btn.parentNode.removeChild(btn);
   });
   accessDOM.playerDivs().after(createDOM.versus());
-  accessDOM.card().insertBefore(accessDOM.tokens(), accessDOM.board());
+  accessDOM.header().firstChild.replaceWith(accessDOM.tokens())
+  // accessDOM.card().insertBefore(accessDOM.tokens(), accessDOM.board());
 }
 
 function createBoard(num, element) {
