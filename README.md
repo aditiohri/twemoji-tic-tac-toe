@@ -5,9 +5,7 @@ LEGEND
 TO DO
 
 STYLING 👈
-  - move start over button so layout does no shift
-  - make header and footer smaller so UI fits on screen w/o scrolling 
-    * https://stackoverflow.com/questions/37098306/this-site-appears-to-use-a-scroll-linked-positioning-effect-this-may-not-work
+  - remove external border in tic tac toe board
   - choose a real color scheme
   - add social links to my linkedin and github in footer
 DEPLOYING
