@@ -3,7 +3,6 @@ import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-butt
 const emojiOptions = { position: "top-start" };
 
 const createDOM = {
-  message: () => createElement("div", { class: "message" }),
   board: () => createElement("div", { class: "board", id: "board" }),
   instructions: () => createElement("div", { class: "instructions" }),
   tokens: () =>
@@ -155,7 +154,6 @@ function moveEmojiTokensAboveBoard() {
   });
   accessDOM.playerDivs().after(createDOM.versus());
   accessDOM.header().firstChild.replaceWith(accessDOM.tokens());
-  // accessDOM.card().insertBefore(accessDOM.tokens(), accessDOM.board());
 }
 
 function createBoard(num, element) {
@@ -196,14 +194,14 @@ function resetGame(event) {
   initState(state.playerMoves, []);
   removeChildren(accessDOM.card());
   setHeading();
-  setFooter()
+  setFooter();
   initEmojiPicker();
   event.target.remove();
 }
 
-function setHeading() {
+function setHeading(text = "Twemoji Tic Tac Toe") {
   const heading = createDOM.heading();
-  heading.textContent = "Twemoji Tic Tac Toe";
+  heading.textContent = text;
   accessDOM.header().firstChild.replaceWith(heading);
 }
 
@@ -300,7 +298,7 @@ function endGame(win, tie) {
 }
 
 function displayEndMessage(messageText) {
-  const message = createDOM.message();
+  const message = createDOM.heading();
   message.textContent = messageText;
   deactivateCells();
   accessDOM.tokens().replaceWith(message);
