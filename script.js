@@ -29,6 +29,7 @@ const createDOM = {
   versus: () => createElement("span", { class: "versus" }),
   cell: () => createElement("div"),
   resetBtn: () => createElement("button"),
+  heading: () => createElement("h1"),
 };
 
 const accessDOM = {
@@ -152,7 +153,7 @@ function moveEmojiTokensAboveBoard() {
     btn.parentNode.removeChild(btn);
   });
   accessDOM.playerDivs().after(createDOM.versus());
-  accessDOM.header().firstChild.replaceWith(accessDOM.tokens())
+  accessDOM.header().firstChild.replaceWith(accessDOM.tokens());
   // accessDOM.card().insertBefore(accessDOM.tokens(), accessDOM.board());
 }
 
@@ -193,8 +194,15 @@ function resetGame(event) {
   initState(state.playerTokens, "");
   initState(state.playerMoves, []);
   removeChildren(accessDOM.card());
+  setHeading();
   initEmojiPicker();
   event.target.remove();
+}
+
+function setHeading() {
+  const heading = createDOM.heading();
+  heading.textContent = "Twemoji Tic Tac Toe";
+  accessDOM.header().firstChild.replaceWith(heading);
 }
 
 // Game Play Functions
