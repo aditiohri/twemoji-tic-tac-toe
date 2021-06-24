@@ -36,6 +36,7 @@ const accessDOM = {
   card: () => document.querySelector("[data-card]"),
   tokens: () => document.getElementById("tokens"),
   header: () => document.getElementById("header"),
+  footer: () => document.getElementById("footer"),
   board: () => document.getElementById("board"),
   playerToken: (playerNum) =>
     document.getElementById(`player${playerNum}Token`),
@@ -186,7 +187,7 @@ function addResetBtn() {
   const resetBtn = createDOM.resetBtn();
   resetBtn.textContent = "Start Over";
   resetBtn.addEventListener("click", resetGame);
-  accessDOM.card().appendChild(resetBtn);
+  accessDOM.footer().firstChild.replaceWith(resetBtn);
 }
 
 function resetGame(event) {
@@ -195,6 +196,7 @@ function resetGame(event) {
   initState(state.playerMoves, []);
   removeChildren(accessDOM.card());
   setHeading();
+  setFooter()
   initEmojiPicker();
   event.target.remove();
 }
@@ -203,6 +205,11 @@ function setHeading() {
   const heading = createDOM.heading();
   heading.textContent = "Twemoji Tic Tac Toe";
   accessDOM.header().firstChild.replaceWith(heading);
+}
+
+function setFooter() {
+  const footer = accessDOM.footer();
+  footer.textContent = "😄";
 }
 
 // Game Play Functions
