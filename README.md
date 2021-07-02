@@ -1,25 +1,17 @@
-LEGEND
-✅ = done
+### LEGEND
+
+✅ = done  
 👈 = in process
 
-TO DO
+# TO DO
 
-STYLING 
-  - add social links to my linkedin and github in footer
-   ```
-   how do you insert an anchor ref node within a node?
-  // footer.appendChild(  
-  //   <span>
-  //     Made with 😄 by
-  //     <a href="https://github.com/aditi-ohri" target="_blank" rel="noopener">
-  //       Aditi Ohri
-  //     </a>
-  //   </span>
-  // );
-  ```
-DEPLOYING 👈
+### STYLING  
+- add social links to my linkedin and github in footer 
 
-AAUser,
+-----------------------------------   
+
+
+# USER STORIES
 
 MVP
 
@@ -47,7 +39,10 @@ POST MVP
   - let user know they can change emojis at any point
 
 
-RESOURCES
+-----------------------------------   
+
+
+# RESOURCES
 
 [how to call twemoji cdn in browser](https://dev.to/iamludal/you-are-using-emojis-the-wrong-way-i71)
 
