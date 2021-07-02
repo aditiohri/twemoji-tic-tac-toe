@@ -4,11 +4,20 @@ LEGEND
 
 TO DO
 
-STYLING 👈
-  - remove external border in tic tac toe board
-  - choose a real color scheme
+STYLING 
   - add social links to my linkedin and github in footer
-DEPLOYING
+   ```
+   how do you insert an anchor ref node within a node?
+  // footer.appendChild(  
+  //   <span>
+  //     Made with 😄 by
+  //     <a href="https://github.com/aditi-ohri" target="_blank" rel="noopener">
+  //       Aditi Ohri
+  //     </a>
+  //   </span>
+  // );
+  ```
+DEPLOYING 👈
 
 AAUser,
 
@@ -37,19 +46,8 @@ POST MVP
   - map out user flow
   - let user know they can change emojis at any point
 
-AADev,
-
-
-- I can test the following functionality:
-  - winning / losing / tied outcomes
-  - a server is running ?
-  - it's responsive?
-    - emojis need to be different
-    - icon is an emoji and not empty string
 
 RESOURCES
-[helpful code planning](https://medium.com/swlh/tutorial-tic-tac-toe-game-with-vanilla-javascript-4857eaca59e)
-[web dev simplified](https://github.com/WebDevSimplified/JavaScript-Tic-Tac-Toe/blob/master/script.js)
 
 [how to call twemoji cdn in browser](https://dev.to/iamludal/you-are-using-emojis-the-wrong-way-i71)
 
