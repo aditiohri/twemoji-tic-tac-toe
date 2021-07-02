@@ -159,7 +159,6 @@ button {
 @media (max-width: 768px) {
   .header,
   .footer {
-    color: green;
     padding: 0.25rem;
   }
 
