@@ -1,3 +1,7 @@
+### What is this?
+
+I created this vanilla js tic-tac-toe board to get better acquainted with the DOM!
+
 ### LEGEND
 
 ✅ = done  
