@@ -1,12 +1,13 @@
 # [Twemoji Tic Tac Toe](https://aditiohri.com)
-Play tic tac toe with emojis!
-⁣⭕❕⭕❕❌
-➖➕➖➕➖
-⭕❕⁣❌❕⭕
-➖➕➖➕➖
-❌❕❌❕⭕
+Play tic tac toe with emojis!  
 
-### What is this?
+⁣⭕❕⭕❕❌  
+➖➕➖➕➖  
+⭕❕⁣❌❕⭕  
+➖➕➖➕➖  
+❌❕❌❕⭕  
+
+## What is this?
 I created this vanilla js tic-tac-toe board to get better acquainted with the DOM.
 
 ### Future enhancements
