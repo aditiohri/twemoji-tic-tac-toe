@@ -101,8 +101,8 @@ button {
 }
 
 .board {
-  height: 600px;
-  width: 600px;
+  height: 30vh;
+  width: 30vh;
   display: grid;
   justify-content: center;
   align-content: center;

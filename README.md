@@ -1,53 +1,9 @@
-### LEGEND
+# [Twemoji Tic Tac Toe](https://aditiohri.com)
+Play tic tac toe with emojis.
+I created this game in vanilla javascript so I could familiarize myself with the DOM and all its utilities!
 
-✅ = done  
-👈 = in process
-
-# TO DO
-
-### STYLING  
-- add social links to my linkedin and github in footer 
-
------------------------------------   
-
-
-# USER STORIES
-
-MVP
-
-- I can play this game on tablet, phone and desktop ✅
-- I can choose an emoji as my tic tac toe token ✅
-  - The Emoji Pickers for each player show up on page load ✅
-  - You can only click the start button once both avatars are set ✅
-  - Once the start button is clicked, the grid loads ✅
-    - and you see player 1's emoji whn you hover over a tile ✅
-    - when player 1 clicks on a tile, their emoji is visible inside ✅
-- Once it is player 2's turn, they can see their emoji when hovering over a tile ✅
-  - on their turn, when player 2 clicks on a tile, their emoji is visible inside ✅
-  - The token I choose will be different from the one my opponent chooses ✅
-- I can see the winning / losing / tied outcome of the game ✅
-- Once the game is over, I cannot click any of the cells until I hit restart btn ✅
-
-POST MVP
-
-- I can choose to play the game with more cells
-- I can change my emoji icon at any time and the changes will be reflected in the current board
-- I can choose to play against the computer
-- I can choose to play against a friend!!!!!! (websockets? chat tool?)
-- I am guided through the game with instructions
-  - map out user flow
-  - let user know they can change emojis at any point
-
-
------------------------------------   
-
-
-# RESOURCES
-
-[how to call twemoji cdn in browser](https://dev.to/iamludal/you-are-using-emojis-the-wrong-way-i71)
-
-[twemoji github](https://github.com/twitter/twemoji)
-
-[vanilla js emoji picker - easier to use with node](https://github.com/joeattardi/emoji-button)
-
-[including modules in vanilla js](https://stackoverflow.com/questions/44490627/how-to-do-import-export-a-class-in-vanilla-javascript-js)
+### Future enhancements
+- emphasize current player's emoji in score section to support users using only the keyboard
+- allow user to choose number of cells
+- allow multi-player access with websockets, so users can play on multiple browsers/devices
+- optimize code to play on mobile devices

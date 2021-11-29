@@ -1,6 +1,6 @@
 import { EmojiButton } from "https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.0";
 
-const emojiOptions = { position: "top-start" };
+const emojiOptions = { position: "right-start" };
 
 const createDOM = {
   board: () => createElement("div", { class: "board", id: "board" }),
@@ -26,7 +26,7 @@ const createDOM = {
       id: `player${playerNum}Token`,
     }),
   versus: () => createElement("span", { class: "versus" }),
-  cell: () => createElement("div"),
+  cell: () => createElement("div", { role: "button", tabindex: "0"}),
   resetBtn: () => createElement("button"),
   heading: () => createElement("h1"),
 };
@@ -78,14 +78,14 @@ function initEmojiPicker() {
   const instructions = createDOM.instructions();
   const tokens = createDOM.tokens();
   const board = createDOM.board();
-  startBtn.textContent = "Pick Your Emoji Below!";
-  startBtn.addEventListener("click", startGame);
-  instructions.append(startBtn);
   const emojiPickers = createEmojiPickers(startBtn);
   emojiPickers.forEach((picker) => {
     tokens.append(picker);
   });
   instructions.appendChild(tokens);
+  startBtn.textContent = "Pick Your Emoji Above!";
+  startBtn.addEventListener("click", startGame);
+  instructions.append(startBtn);
   board.appendChild(instructions);
   accessDOM.card().appendChild(board);
 }
@@ -172,10 +172,12 @@ function createCell() {
 function manageEvents(element, remove = false) {
   if (!remove) {
     element.addEventListener("click", handleCellClick, { once: true });
+    element.addEventListener("keypress", handleCellClick, { once: true });
     element.addEventListener("mouseover", handleCellHover);
     element.addEventListener("mouseleave", handleCellLeave);
   } else {
     element.removeEventListener("click", handleCellClick, false);
+    element.removeEventListener("keypress", handleCellClick, false);
     element.removeEventListener("mouseover", handleCellHover, false);
     element.removeEventListener("mouseleave", handleCellLeave, false);
   }
