@@ -1,6 +1,13 @@
 # [Twemoji Tic Tac Toe](https://aditiohri.com)
-Play tic tac toe with emojis.
-I created this game in vanilla javascript so I could familiarize myself with the DOM and all its utilities!
+Play tic tac toe with emojis!
+⁣⭕❕⭕❕❌
+➖➕➖➕➖
+⭕❕⁣❌❕⭕
+➖➕➖➕➖
+❌❕❌❕⭕
+
+### What is this?
+I created this vanilla js tic-tac-toe board to get better acquainted with the DOM.
 
 ### Future enhancements
 - emphasize current player's emoji in score section to support users using only the keyboard
